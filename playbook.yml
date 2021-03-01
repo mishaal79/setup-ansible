@@ -1,0 +1,17 @@
+---
+
+# Playbook to setup ssh keys on hosts
+
+- name: Distribute ssh keys to host and perform keyscan
+  # vars_prompt: # prompt for target hosts group
+  #   - name: group
+  #     prompt: "What is your target group"
+  #     private: no
+  # hosts: "{{ group }}"
+  hosts: all
+  remote_user: svc_ansible
+  become: yes # Allows privilege escalation
+  gather_facts: true
+
+  roles:
+    - setup-ansible

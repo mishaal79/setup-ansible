@@ -1,0 +1,29 @@
+---
+
+# Notes: 
+
+## Setting up keybased ssh authentication
+# # Task to copy sudoers file
+# # 1. copy suoderos file to /etc/sudoers.d/
+
+# Task to perform ssh keyscan on host machine
+- name: keyscan remote machine key to host
+  local_action: shell ssh-keyscan {{ inventory_hostname }}
+
+# Task to perform ssh-copy id using ansible module authorized_key
+
+- name: copy ssh pub key to remote host
+  authorized_key:
+    user: svc_ansible
+    state: present
+    key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+
+# # ====================sudoers file copy to /etc/sudoers.d/====================
+
+- name: copy sudoers file to /etc/sudoers.d/
+  template:
+#   copy:
+    src: ansible
+    dest: /etc/sudoers.d
+    validate: /usr/sbin/visudo -cf %s
+
